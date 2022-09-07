@@ -29,4 +29,27 @@ For the BONUS question: We can add this block : <br />
 
 I created a mongoDB database ( use pex ) <br />
 After creation the pex database, I created a collection, pex. ( db.createCollection('artists')<br />
-Finally, I inserted some documents into this collection. I added pex database dump file. <br />
+Finally, I inserted some documents into this collection. I added pex database dump file. (mongodumpfile folder) <br />
+<br />
+### Bonus Question<br />
+Mmongodb does not support triggers. Instead, we can audit the changes made for a particular collection.<br />
+{<br />
+    atype: "authCheck",<br />
+    "param.ns": "pex.artists",<br />
+    "param.command": { $in: [ "insert", "delete", "update", "findandmodify" ] }<br />
+}<br />
+<br />
+Q: Sort said documents in ascending order (I used the id field for sort key , because the sort key is not spesified in the question.)<br />
+A: db.artists.find().sort({"id":1}).pretty()<br />
+<br />
+Q: Filter the documents using a covered query based on Rightsholders.<br />
+A:  db.artists.find({"firt_name":"Jack","last_name":"Pink"}).pretty() <br />
+<br />
+Q: Calculate the Global Quantity.<br />
+A: I did not understand the question.<br />
+<br />
+Q: Configure the cache size for MMAPv1 <br />
+A: With MMAPv1, MongoDB automatically uses all free memory on the machine as its cache. <br />
+
+
+
