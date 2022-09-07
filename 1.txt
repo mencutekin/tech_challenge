@@ -1,0 +1,90 @@
+CREATE DATABASE pex;
+CREATE SCHEMA pex;
+
+CREATE TABLE pex.users (
+	id serial NOT NULL,
+	username varchar(50) NULL,
+	with_admin_priv bool NOT NULL DEFAULT false,
+	with_write_priv bool NOT NULL DEFAULT false,
+	with_read_priv bool NOT NULL DEFAULT false,
+	CONSTRAINT users_pkey PRIMARY KEY (id)
+);
+
+
+
+CREATE TABLE pex.albums (
+	id serial NOT NULL,
+	title text NULL,
+	artist_id int4 NOT NULL,
+	CONSTRAINT albums_pkey PRIMARY KEY (id)
+);
+
+
+
+CREATE TABLE pex.artists (
+	id serial NOT NULL,
+	org_id int4 NULL,
+	first_name varchar(50) NOT NULL,
+	last_name varchar(50) NOT NULL,
+	CONSTRAINT artists_pkey PRIMARY KEY (id)
+);
+
+
+CREATE TABLE pex.audit_albums (
+	curr_artist_id int4 NULL,
+	username varchar(50) NULL,
+	entry_date timestamp NULL,
+	title text NULL,
+	old_artist_id int4 NULL
+);
+
+CREATE TABLE pex.genres (
+	id int4 NOT NULL DEFAULT nextval('pex.genre_id_seq'::regclass),
+	"name" text NULL,
+	CONSTRAINT genre_pkey PRIMARY KEY (id)
+);
+
+
+CREATE TABLE pex.organization (
+	id serial NOT NULL,
+	"name" text NULL,
+	CONSTRAINT organization_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE pex.tracks (
+	id serial NOT NULL,
+	album_id int4 NOT NULL,
+	genre_id int4 NOT NULL,
+	title text NOT NULL,
+	len int4 NULL,
+	CONSTRAINT tracks_pkey PRIMARY KEY (id)
+);
+
+create trigger trg_albums before
+update
+    of artist_id on
+    pex.albums for each row execute function pex.audit_for_albums();
+
+CREATE OR REPLACE FUNCTION pex.audit_for_albums()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+
+BEGIN
+INSERT INTO audit_albums (title,old_artist_id,artist_id,username,entry_date) VALUES (NEW.title,OLD.artist_id,NEW.artist_id,current_user,current_date);
+RETURN NEW;
+
+END;
+
+$function$
+;
+
+
+CREATE UNIQUE INDEX users_username_idx ON pex.users USING btree (username);
+CREATE UNIQUE INDEX albums_title_idx ON pex.albums USING btree (title);
+CREATE UNIQUE INDEX genre_name_idx ON pex.genres USING btree (name);
+CREATE UNIQUE INDEX artists_first_name_last_name_idx ON pex.artists USING btree (first_name, last_name);
+ALTER TABLE pex.tracks ADD CONSTRAINT fk_tracks_album_id FOREIGN KEY (album_id) REFERENCES pex.albums(id);
+ALTER TABLE pex.tracks ADD CONSTRAINT fk_tracks_genre_id FOREIGN KEY (genre_id) REFERENCES pex.genres(id);
+ALTER TABLE pex.artists ADD CONSTRAINT fk_artist_org_id FOREIGN KEY (org_id) REFERENCES pex.organization(id);
+ALTER TABLE pex.albums ADD CONSTRAINT fk_albums_artists_id FOREIGN KEY (artist_id) REFERENCES pex.artists(id);
