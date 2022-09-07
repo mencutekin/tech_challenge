@@ -23,7 +23,7 @@ END;<br />
 $function$<br />
 ;<br />
 <br />
-Finally, I added PostgreSQL database dump file with name pex.sql <br />
+Finally, I added PostgreSQL database dump file with name pex_pgdump.sql <br />
 <br />
 <br />
 ## 2- Scripting / Automating <br />
