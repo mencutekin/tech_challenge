@@ -70,6 +70,17 @@ A: I did not understand the question.<br />
 <br />
 Q: Configure the cache size for MMAPv1 <br />
 A: With MMAPv1, MongoDB automatically uses all free memory on the machine as its cache. <br />
-
+<br />
+## 4- Q & A<br />
+<br />
+A1: This depends entirely on the application structure.If the application needs a relationship between objects, RDBMS may be the better option. Or, for example, MongoDB is a better option if the application is schema independent.<br />
+I can't decide which database is better just by looking at a few tables. However, being independent of the schema desing can be practical.So, MongoDB for example, may be better option than the others.<br />
+<br />
+A2: Triggers can execute every time some field in database is updated. If a field is likely to be updated often, it is a system overhead.Also, triggers can have a hidden behaviour.
+But,triggers may be useful in some cases ( allows easy auditing of data,helps us to automate the data alterations etc) ,however we should not use triggers as much as possible. There should be as few logical operations as possible in the database., such as triggers, functions, procedures etc.<br />
+<br />
+A3: 
+A4: IF : data persistence is not the highest priority , need fast and frequent access to data, loss of data (or at least the possibility of this) is workable for the application, we can run a database completely in-memory with no permanent data storage.<br />
+A5: I think, ZFS is a sophisticated file system, and it has very useful properties.But, it is expensive option. My favorite FS is XFS :)
 
 
