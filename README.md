@@ -79,8 +79,11 @@ I can't decide which database is better just by looking at a few tables. However
 A2: Triggers can execute every time some field in database is updated. If a field is likely to be updated often, it is a system overhead.Also, triggers can have a hidden behaviour.
 But,triggers may be useful in some cases ( allows easy auditing of data,helps us to automate the data alterations etc) ,however we should not use triggers as much as possible. There should be as few logical operations as possible in the database., such as triggers, functions, procedures etc.<br />
 <br />
-A3: 
+A3: I don't know much about FoundationDB, but I found an information on the internet about this problem:<br />
+Fdb keeps a list of the transaction started within 5 sec. Also, data nodes only keep versions of the last 5sec. So if the read version is smaller than the last version kept by dataNodes, the dataNodes have no way to answer the request. That's why fdb throws this exception. the trick to evade from such exceptions is to split one huge time taking transaction to many small transactions. I also noticed fdb performs really well if the transaction time < 300ms.<br />
+<br />
 A4: IF : data persistence is not the highest priority , need fast and frequent access to data, loss of data (or at least the possibility of this) is workable for the application, we can run a database completely in-memory with no permanent data storage.<br />
+<br />
 A5: I think, ZFS is a sophisticated file system, and it has very useful properties.But, it is expensive option. My favorite FS is XFS :)
 
 
