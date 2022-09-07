@@ -2,9 +2,28 @@
 
 ## 1- Create a SQL Database  <br />
 The file with name 1.txt includes the SQL statements. I created 7 tables, 1 function and 1 trigger. <br />
+### Bonus Question<br />
 We can track or audit for the changes of albums table by the trigger. <br />
-I added PostgreSQL database dump file with name pex.sql <br />
 <br />
+create trigger trg_albums before<br />
+update<br />
+    of artist_id on<br />
+    pex.albums for each row execute function pex.audit_for_albums();<br />
+<br />
+CREATE OR REPLACE FUNCTION pex.audit_for_albums()<br />
+ RETURNS trigger<br />
+ LANGUAGE plpgsql<br />
+AS $function$<br />
+BEGIN<br />
+INSERT INTO audit_albums (title,old_artist_id,artist_id,username,entry_date) VALUES (NEW.title,OLD.artist_id,NEW.artist_id,current_user,current_date);<br />
+RETURN NEW;<br />
+<br />
+END;<br />
+<br />
+$function$<br />
+;<br />
+<br />
+Finally, I added PostgreSQL database dump file with name pex.sql <br />
 <br />
 <br />
 ## 2- Scripting / Automating <br />
@@ -16,7 +35,8 @@ vi /etc/ansible/hosts and add below lines into this file<br /> (OR, We can add a
 10.0.3.[20:25] <br />
 And, we should create playbook file ( vi postgres_upgrade.ply , then copy 2.txt file into this file ) <br />
 I designed a basic major upgrade operation, if needed it can be added all extensions which are used by the database. <br />
-For the BONUS question: We can add this block : <br />
+### Bonus Question<br /> 
+We can add this block : <br />
 <br />
   - name: Kill long running queries for web user<br />
 	  postgresql_query:<br />
