@@ -30,7 +30,7 @@ Finally, I added PostgreSQL database dump file with name pex_pgdump.sql <br />
 <br />
 I prefer to use Ansible. The file 2.txt includes the Ansible code. <br />
 First of all, we should add IP address to ansible host file ( /etc/ansible/hosts ) <br />
-vi /etc/ansible/hosts and add below lines into this file<br /> (OR, We can add all the IP addresses one under the other.)
+vi /etc/ansible/hosts and add below lines into this file<br /> (OR, We can add all the IP addresses one under the other.)<br />
 [postgres_hosts]<br />
 192.168.[100:120] <br />
 And, we should create playbook file ( vi postgres_upgrade.ply , then copy 2.txt file into this file ) <br />
