@@ -32,7 +32,7 @@ I prefer to use Ansible. The file 2.txt includes the Ansible code. <br />
 First of all, we should add IP address to ansible host file ( /etc/ansible/hosts ) <br />
 vi /etc/ansible/hosts and add below lines into this file<br /> (OR, We can add all the IP addresses one under the other.)
 [postgres_hosts]<br />
-10.0.3.[20:25] <br />
+192.168.[100:120] <br />
 And, we should create playbook file ( vi postgres_upgrade.ply , then copy 2.txt file into this file ) <br />
 I designed a basic major upgrade operation, if needed it can be added all extensions which are used by the database. <br />
 ### Bonus Question<br /> 
